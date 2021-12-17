@@ -1,21 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native';
-import { Button, Text } from 'react-native-elements';
-import LinearProgress from 'react-native-elements/dist/linearProgress/LinearProgress';
+import { SafeAreaView, FlatList, View } from 'react-native';
+import { Button, Text, LinearProgress } from 'react-native-elements';
+
 
 // Ejercicio 1
 import Counter from '../../components/counter/counter';
 
 // Ejericicio 2
 import ProductsService from '../../services/ProductsService';
+import ProductItem from '../../components/ProductItem/ProductItem';
 
 import styles from './product-styles';
 
 const Products = () => {
   // Crear espacio que pueda contener la informacion de los productos
   const [products, setProducts] = useState<any>([]);
-
 
   const navigation = useNavigation<any>();
 
@@ -39,15 +39,22 @@ const Products = () => {
 
   // Mientras los datos no cargen se muestra una linea de carga (LinearProgress)
   if (products.length === 0) {
-    <LinearProgress />
+    return (
+      <LinearProgress />
+    )
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text h4>Soy la página de productos</Text>
-      <Text h4>{products[0].name}</Text>
-      <Counter />
-      <Button onPress={onPressButton} title="Ir a la página de detalles" />
+      <FlatList
+        data={products}
+        // Si utilizo este atributo mostrara una 
+        // barra de scroll de la aplicacion :
+        showsVerticalScrollIndicator={true}
+        renderItem={({ item }) => {
+          return <ProductItem productIT={item} />;
+        }}
+      />
     </SafeAreaView>
   );
 };
